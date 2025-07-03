@@ -27,7 +27,7 @@ int main() {
     while(true) {
         bool choice;
 
-        std::cout<<"Do you want to pass kernels (1/0)\n";
+        std::cout<<"Pass kernels: Press 1 for Yes and 0 for No\n";
         std::cin>>choice;
 
         if(choice) {
@@ -36,7 +36,7 @@ int main() {
 
             for(int i=0; i<blobs.size(); ++i) {
                 
-                iq.push({blobs[i].data, blobs[i].size});
+                iq.push({blobs[i].data, blobs[i].size, blobs[i].kernel_id});
                 std::this_thread::sleep_for(std::chrono::milliseconds(50));
 
             }

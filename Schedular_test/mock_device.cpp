@@ -16,7 +16,7 @@ bool is_device_idle() {
 }
 
 void submit_kernel_to_driver(const AIKernel& kernel) {
-    std::cout << "[MockDevice] Executing kernel of size " << kernel.size << " bytes...\n";
+    std::cout << "[MockDevice] Executing kernel (Kernel ID: "<<kernel.kernel_id << ") of size " << kernel.size << " bytes...\n";
     std::this_thread::sleep_for(std::chrono::milliseconds(10));
     busy = true;
     last = std::chrono::steady_clock::now();
