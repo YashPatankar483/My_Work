@@ -6,23 +6,14 @@
 #include <chrono>
 #include "mock_compiler.h"
 #include <iostream>
+#include "driver_interface.h"
 
 int main() {
     InstructionQueue iq;
     // background thread waiting to pop and process kernels from the queue.
     std::thread exec_thread(runtime_executor, std::ref(iq));
 
-    // background thread behaving as a compiler, creating kernels and passing to the scheduler
-    // std::thread compiler_thread(compile_kernels);
-
-    // for (int i = 0; i < 5; ++i) {
-    //     void* data = malloc(256);
-    //     memset(data, 0, 256);
-    //     iq.push({ data, 256 });
-    //     std::this_thread::sleep_for(std::chrono::milliseconds(50));
-    // }
-
-    // exec_thread.join(); // In real systems this would run forever.
+    std::vector<int> kernel_sequence;               // For testing
 
     while(true) {
         bool choice;
@@ -38,10 +29,21 @@ int main() {
                 
                 iq.push({blobs[i].data, blobs[i].size, blobs[i].kernel_id});
                 std::this_thread::sleep_for(std::chrono::milliseconds(50));
+                kernel_sequence.push_back(blobs[i].kernel_id);
 
             }
             
         }
+        else {
+            std::cout<<"\n____________________________________________________________________________________________________________\n";
+            std::cout<<"Kernel sequence from compiler: \n";
+            for(int i=0; i<kernel_sequence.size(); ++i) {
+                std::cout<<"Kernel ID: " << kernel_sequence[i]<< "|";
+            }
+            std::cout<<"\n";
+            print_executed_kernels();
+        }
+
     }
 
     return 0;
