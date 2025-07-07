@@ -4,6 +4,7 @@
 #include <chrono>
 #include <thread>
 #include <vector>
+#include <algorithm>
 
 static bool busy = false;
 static auto last = std::chrono::steady_clock::now();
@@ -21,8 +22,25 @@ void submit_kernel_to_driver(const AIKernel& kernel) {
 
     executed_kernel_ids.push_back(kernel.kernel_id);  // Track order
 
-    std::cout << "[MockDevice] Executing kernel (Kernel ID: "<<kernel.kernel_id << ") of size "<<kernel.size<<" bytes...\n";
-    std::this_thread::sleep_for(std::chrono::milliseconds(10));
+    // std::cout << "[MockDevice] Executing kernel (Kernel ID: "<<kernel.kernel_id <</* ") of size "<<kernel.size<<" bytes...*/"\n";
+    // std::this_thread::sleep_for(std::chrono::milliseconds(10));
+
+    // Construct Windows-friendly path
+    std::string path = kernel.filepath;  // Ex: "kernels/kernel_1.exe"
+    std::replace(path.begin(), path.end(), '/', '\\');  // Convert to backslashes
+
+    std::cout << "[MockDevice] Launching kernel ID: " << kernel.kernel_id
+              << " at path: " <<kernel.filepath << "\n";
+
+    int result = system(path.c_str());  // 👈 Run the .exe
+
+    if (result != 0) {
+        std::cerr << "[MockDevice] Failed to execute " << kernel.filepath << "\n";
+    } 
+    else {
+        std::cout << "[MockDevice] Finished executing kernel ID: " << kernel.kernel_id << "\n";
+    }
+    
     busy = true;
     last = std::chrono::steady_clock::now();
 }

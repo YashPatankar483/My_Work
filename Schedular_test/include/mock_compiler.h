@@ -1,9 +1,11 @@
 #pragma once
 #include <vector>
+#include <string>
 
 struct CompiledBlob {
-    void* data;
-    size_t size;
+    std::string filepath;                   // Path to the .exe file
+    // void* data;
+    // size_t size;
     int kernel_id;
 };
 

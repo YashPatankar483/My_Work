@@ -7,6 +7,7 @@
 #include "mock_compiler.h"
 #include <iostream>
 #include "driver_interface.h"
+#include <string>
 
 int main() {
     InstructionQueue iq;
@@ -27,7 +28,7 @@ int main() {
 
             for(int i=0; i<blobs.size(); ++i) {
                 
-                iq.push({blobs[i].data, blobs[i].size, blobs[i].kernel_id});
+                iq.push({blobs[i].filepath/*, blobs[i].size*/, blobs[i].kernel_id});
                 std::this_thread::sleep_for(std::chrono::milliseconds(50));
                 kernel_sequence.push_back(blobs[i].kernel_id);
 
